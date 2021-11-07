@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-oauth2
+spec:
+  selector:
+    matchLabels:
+      app: simple-oauth2
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: simple-oauth2
+    spec:
+      containers:
+      - image: tiennthsc/kong-oauth-app:v1.0.0.1
+        name: simple-oauth2
+        env:
+        ports:
+        - containerPort: 3000
+          name: simple-oauth2
