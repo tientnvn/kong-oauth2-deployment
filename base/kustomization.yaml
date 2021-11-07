@@ -1,6 +1,7 @@
 resources:
 - api-ingress.yaml
 - oauth2-deployment.yaml
+- oauth2-service.yaml
 
 
 apiVersion: kustomize.config.k8s.io/v1beta1
