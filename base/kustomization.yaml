@@ -3,7 +3,13 @@ resources:
 - oauth2-deployment.yaml
 - oauth2-service.yaml
 - api-admin-ingress.yaml
-
+- db-deployment.yaml
+- db-pvc.yaml
+- db-secret.yaml
+- db-service.yaml
+- deployment.yaml
+- ingress.yaml
+- service.yaml
 
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
