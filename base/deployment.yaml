@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: konga-app
+spec:
+  selector:
+    matchLabels:
+      app: konga-app
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: konga-app
+    spec:
+      containers:
+      - image: pantsel/konga
+        name: konga-app
+        env:
+          # Use secret in real usage
+        - name: TOKEN_SECRET
+          value: some-secret-token
+        - name: DB_ADAPTER
+          value: postgres
+        - name: DB_HOST
+          value: konga-db
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-account-secret
+              key: rootPassword
+        - name: DB_USER 
+          valueFrom:
+            secretKeyRef:
+              name: db-account-secret
+              key: username
+        - name: DB_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: db-account-secret
+              key: dbName
+        - name: NODE_ENV
+          value: development
+        - name: KONGA_HOOK_TIMEOUT
+          value: "10000"
+        - name: BASE_URL
+          value: https://apple.home-labs.me/
+        ports:
+        - containerPort: 1337
+          name: konga-app

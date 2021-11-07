@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: konga-db
+spec:
+  selector:
+    matchLabels:
+      app: konga-db
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: konga-db
+    spec:
+      containers:
+      - image: postgres:9.6
+        name: konga-db
+        env:
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-account-secret
+              key: rootPassword
+        - name: POSTGRES_USER 
+          valueFrom:
+            secretKeyRef:
+              name: db-account-secret
+              key: username
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: db-account-secret
+              key: dbName
+        ports:
+        - containerPort: 5432
+          name: konga-db
+        volumeMounts:
+        - name: postgres-konga-ps
+          mountPath: /var/lib/postgresql/data
+          subPath: postgres
+      volumes:
+      - name: postgres-konga-ps
+        persistentVolumeClaim:
+          claimName: postgres-konga-pv-claim
